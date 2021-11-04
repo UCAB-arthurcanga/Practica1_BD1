@@ -53,7 +53,7 @@ ALTER TABLE Cliente ADD CONSTRAINT UQ_ClienteCedula UNIQUE(Cedula);
 
 ALTER TABLE Estudio ADD COINSTRAINT PK_IdEstudio PRIMARY KEY(IdEstudio);
 
-ALTER TABLE Estudio ADD CONSTRAINT UQ_NombreEstudio(NombreEstudio);
+ALTER TABLE Estudio ADD CONSTRAINT UQ_NombreEstudio UNIQUE(NombreEstudio);
 
 -------------------------------------------------------------------------
  CREATE TABLE Actor(
@@ -62,7 +62,7 @@ ALTER TABLE Estudio ADD CONSTRAINT UQ_NombreEstudio(NombreEstudio);
     Nacionalidad dom_pais
 );
 
-ALTER TABLE ADD CONSTRAINT PK_IdActor PRIMARY KEY(IdActor);
+ALTER TABLE Actor ADD CONSTRAINT PK_IdActor PRIMARY KEY(IdActor);
 
 -----------------------------------------------------------------------------
 CREATE TABLE Pelicula(
@@ -73,10 +73,10 @@ CREATE TABLE Pelicula(
     FechaDesincorporacion dom_fecha ----NO ES OBLIGATORIA
 ); 
 
-ALTER TABLE Pelicula ADD COINSTRAINT PK_IdPelicula PRIMARY KEY(IdPelicula);
+ALTER TABLE Pelicula ADD CONSTRAINT PK_IdPelicula PRIMARY KEY(IdPelicula);
 
 ALTER TABLE Pelicula ADD CONSTRAINT FK_Pelicula_IdEstudio 
-FOREING KEY(IdEstudio) REFERENCES Estudio(IdEstudio)
+FOREIGN KEY(IdEstudio) REFERENCES Estudio(IdEstudio)
 ON DELETE NO ACTION ON UPDATE CASCADE;
 ------------------------------------------------------------------
  CREATE TABLE Prestamo(
@@ -85,18 +85,18 @@ ON DELETE NO ACTION ON UPDATE CASCADE;
     FechaPrestamo dom_fecha,
     DiasPrestamos int,
     FechaDevolucion dom_fecha, --NO ES OBLIGATORIA
-    EstatusP dom_statusP,
+    EstatusP dom_statusP
 );
 
-ALTER TABLE ADD COINSTRAINT PK_NumCliente_IdPelicula_FechaPrestamo
+ALTER TABLE Prestamo ADD CONSTRAINT PK_NumCliente_IdPelicula_FechaPrestamo
 PRIMARY KEY(NumCliente,IdPelicula,FechaPrestamo);
 
 ALTER TABLE Prestamo ADD CONSTRAINT FK_Prestamo_NumCliente 
-FOREING KEY(NumCliente) REFERENCES Cliente(NumCliente)
+FOREIGN KEY(NumCliente) REFERENCES Cliente(NumCliente)
 ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE Prestamo ADD CONSTRAINT FK_Prestamo_IdPelicula
-FOREING KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
+FOREIGN KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
 ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ------------------------------------------------------------------------
@@ -106,14 +106,14 @@ ON DELETE NO ACTION ON UPDATE CASCADE;
     Personaje dom_nombre
 );
 
-ALTER TABLE ADD COINSTRAINT PK_IdPelicula_IdActor_Personaje PRIMARY KEY(IdPelicula,IdActor,Personaje);
+ALTER TABLE PeliculasActores ADD CONSTRAINT PK_IdPelicula_IdActor_Personaje PRIMARY KEY(IdPelicula,IdActor,Personaje);
 
-ALTER TABLE ADD CONSTRAINT FK_PeliculasActores_IdPelicula 
-FOREING KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
+ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdPelicula 
+FOREIGN KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
 ON DELETE NO ACTION ON UPDATE CASCADE;
 
-ALTER TABLE ADD CONSTRAINT FK_PeliculasActores_IdActor 
-FOREING KEY(IdActor) REFERENCES Actor(IdActor)
+ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdActor 
+FOREIGN KEY(IdActor) REFERENCES Actor(IdActor)
 ON DELETE NO ACTION ON UPDATE CASCADE;
 
 
