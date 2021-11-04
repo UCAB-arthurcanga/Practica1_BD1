@@ -28,7 +28,7 @@ CREATE DATABASE Practica1;
         VALUE = 'CD'           ------------Cerrado al dia----------------
     ) NOT NULL; 
 
- CREATE DOMAIN dom_fecha AS date
+ CREATE DOMAIN dom_fecha AS date;
 
 -----------TABLAS ANTES DE LOS CAMBIOS------------------
 
@@ -51,7 +51,7 @@ ALTER TABLE Cliente ADD CONSTRAINT UQ_ClienteCedula UNIQUE(Cedula);
     PaisUbicacion dom_pais
 );
 
-ALTER TABLE Estudio ADD COINSTRAINT PK_IdEstudio PRIMARY KEY(IdEstudio);
+ALTER TABLE Estudio ADD CONSTRAINT PK_IdEstudio PRIMARY KEY(IdEstudio);
 
 ALTER TABLE Estudio ADD CONSTRAINT UQ_NombreEstudio UNIQUE(NombreEstudio);
 
@@ -115,18 +115,3 @@ ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdActor 
 FOREIGN KEY(IdActor) REFERENCES Actor(IdActor)
 ON DELETE NO ACTION ON UPDATE CASCADE;
-
-
-
-------------------------------
--- create table CLIENTES(
---     RIFCliente int not null,
---     Cedula int,
---     NombreC varchar(60),
---     DireccionC dom_direccion,
---     TelefonoC dom_telefonos,
---     FechaNac date,
---     StatusC StatusC_D,
---     FechaAfiliacion dom_fechas,
---     FechaDesafiliacion dom_fechas
--- );
