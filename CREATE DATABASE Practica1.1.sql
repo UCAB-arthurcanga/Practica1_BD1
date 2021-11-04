@@ -44,6 +44,8 @@ CREATE DATABASE Practica1;
 ALTER TABLE Cliente ADD CONSTRAINT PK_NumCliente PRIMARY KEY(NumCliente);
 
 ALTER TABLE Cliente ADD CONSTRAINT UQ_ClienteCedula UNIQUE(Cedula);
+
+CREATE INDEX IndexNombreC ON Cliente(NombreC);
 -------------------------------------------------------------------------------
  CREATE TABLE Estudio(
     IdEstudio int,
@@ -78,6 +80,11 @@ ALTER TABLE Pelicula ADD CONSTRAINT PK_IdPelicula PRIMARY KEY(IdPelicula);
 ALTER TABLE Pelicula ADD CONSTRAINT FK_Pelicula_IdEstudio 
 FOREIGN KEY(IdEstudio) REFERENCES Estudio(IdEstudio)
 ON DELETE NO ACTION ON UPDATE CASCADE;
+
+ALTER TABLE Pelicula ADD CONSTRAINT CK_Peliculas_ValidaFechas 
+CHECK (FechaDesincorporacion>FechaInclusion);
+
+CREATE INDEX IndexTitulo_IDEstudios ON Pelicula(Titulo,IdEstudio);
 ------------------------------------------------------------------
  CREATE TABLE Prestamo(
     NumCliente int, 
@@ -99,6 +106,9 @@ ALTER TABLE Prestamo ADD CONSTRAINT FK_Prestamo_IdPelicula
 FOREIGN KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
 ON DELETE NO ACTION ON UPDATE CASCADE;
 
+ALTER TABLE Prestamo ADD CONSTRAINT CK_Prestamo_ValidaFechas 
+CHECK (FechaDevolucion>=FechaPrestamo);
+
 ------------------------------------------------------------------------
  CREATE TABLE PeliculasActores(
     IdPelicula int,
@@ -115,3 +125,4 @@ ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdActor 
 FOREIGN KEY(IdActor) REFERENCES Actor(IdActor)
 ON DELETE NO ACTION ON UPDATE CASCADE;
+
