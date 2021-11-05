@@ -1,4 +1,4 @@
-CREATE DATABASE Practica1;
+CREATE DATABASE CompraVentasDB;
 
  CREATE DOMAIN dom_nombre AS VARCHAR(25) NOT NULL;
 
@@ -126,3 +126,22 @@ ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdActor
 FOREIGN KEY(IdActor) REFERENCES Actor(IdActor)
 ON DELETE NO ACTION ON UPDATE CASCADE;
 
+----------------------------------------------
+
+DROP DOMAIN dom_statusCli;
+
+ALTER TABLE Pelicula DROP COLUMN FechaDesincorporacion;
+
+ALTER TABLE Prestamo ADD CONSTRAINT CK_DiasPrestamos
+CHECK (DiasPrestamos>=1 AND DiasPrestamos<=7);
+
+CREATE DOMAIN dom_statusCli AS TEXT
+    CHECK(
+        VALUE = 'Activo' OR
+        VALUE = 'Suspendido' OR
+        VALUE = 'Retirado'
+    ) NOT NULL;
+
+ALTER TABLE Cliente ADD COLUMN EstatusC dom_statusCli;
+
+ALTER TABLE Pelicula ADD COLUMN FechaDesincorporacion dom_fecha;
