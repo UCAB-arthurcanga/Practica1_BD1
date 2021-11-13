@@ -128,7 +128,9 @@ ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ----------------------------------------------
 
-DROP DOMAIN dom_statusCli;
+----COMANDOS DE MODIFICACION----
+
+DROP DOMAIN dom_statusCli CASCADE; ----NO PERMITE RESTRICT, USAMOS CASCADE Y ELIMINARA UNA COLUMNA EN LA TABLA CLIENTE
 
 ALTER TABLE Pelicula DROP COLUMN FechaDesincorporacion;
 
@@ -142,6 +144,6 @@ CREATE DOMAIN dom_statusCli AS TEXT
         VALUE = 'Retirado'
     ) NOT NULL;
 
-ALTER TABLE Cliente ADD COLUMN EstatusC dom_statusCli;
+ALTER TABLE Cliente ADD COLUMN EstatusC dom_statusCli; ----RESTAURAMOS LA COLUMNA ELIMINADA EN EL PRIMER COMANDO
 
 ALTER TABLE Pelicula ADD COLUMN FechaDesincorporacion dom_fecha;
