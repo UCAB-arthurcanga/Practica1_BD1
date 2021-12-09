@@ -1,4 +1,4 @@
-CREATE DATABASE CompraVentasDB;
+ CREATE DATABASE CompraVentasDB;
 
  CREATE DOMAIN dom_nombre AS VARCHAR(25) NOT NULL;
 
@@ -13,10 +13,10 @@ CREATE DATABASE CompraVentasDB;
  CREATE DOMAIN dom_titulo AS VARCHAR(40) NOT NULL; --Los nombres de pleiculas pueden llegar a ser bastante mas largos que los propios
 
  CREATE DOMAIN dom_statusCli AS TEXT
-    CHECK(
-        VALUE = 'A' OR          ---------------ACTIVO-----------
-        VALUE = 'S' OR          --------------SUSPENDIDO--------
-        VALUE = 'R'             ----------------RETIRADO----------
+   CHECK(
+       VALUE = 'A' OR          ---------------ACTIVO-----------
+       VALUE = 'S' OR          --------------SUSPENDIDO--------
+       VALUE = 'R'             ----------------RETIRADO----------
     ) NOT NULL;
 
 
@@ -41,11 +41,11 @@ CREATE DATABASE CompraVentasDB;
     EstatusC dom_statusCli,
     FechaAfiliacion dom_fecha NOT NULL
 );
-ALTER TABLE Cliente ADD CONSTRAINT PK_NumCliente PRIMARY KEY(NumCliente);
+ ALTER TABLE Cliente ADD CONSTRAINT PK_NumCliente PRIMARY KEY(NumCliente);
 
-ALTER TABLE Cliente ADD CONSTRAINT UQ_ClienteCedula UNIQUE(Cedula);
+ ALTER TABLE Cliente ADD CONSTRAINT UQ_ClienteCedula UNIQUE(Cedula);
 
-CREATE INDEX IndexNombreC ON Cliente(NombreC);
+ CREATE INDEX IndexNombreC ON Cliente(NombreC);
 -------------------------------------------------------------------------------
  CREATE TABLE Estudio(
     IdEstudio int,
@@ -53,9 +53,9 @@ CREATE INDEX IndexNombreC ON Cliente(NombreC);
     PaisUbicacion dom_pais
 );
 
-ALTER TABLE Estudio ADD CONSTRAINT PK_IdEstudio PRIMARY KEY(IdEstudio);
+ ALTER TABLE Estudio ADD CONSTRAINT PK_IdEstudio PRIMARY KEY(IdEstudio);
 
-ALTER TABLE Estudio ADD CONSTRAINT UQ_NombreEstudio UNIQUE(NombreEstudio);
+ ALTER TABLE Estudio ADD CONSTRAINT UQ_NombreEstudio UNIQUE(NombreEstudio);
 
 -------------------------------------------------------------------------
  CREATE TABLE Actor(
@@ -64,10 +64,10 @@ ALTER TABLE Estudio ADD CONSTRAINT UQ_NombreEstudio UNIQUE(NombreEstudio);
     Nacionalidad dom_pais
 );
 
-ALTER TABLE Actor ADD CONSTRAINT PK_IdActor PRIMARY KEY(IdActor);
+ ALTER TABLE Actor ADD CONSTRAINT PK_IdActor PRIMARY KEY(IdActor);
 
 -----------------------------------------------------------------------------
-CREATE TABLE Pelicula(
+ CREATE TABLE Pelicula(
     IdPelicula int,
     Titulo dom_titulo,
     IdEstudio int,
@@ -75,16 +75,16 @@ CREATE TABLE Pelicula(
     FechaDesincorporacion dom_fecha ----NO ES OBLIGATORIA
 ); 
 
-ALTER TABLE Pelicula ADD CONSTRAINT PK_IdPelicula PRIMARY KEY(IdPelicula);
+ ALTER TABLE Pelicula ADD CONSTRAINT PK_IdPelicula PRIMARY KEY(IdPelicula);
 
-ALTER TABLE Pelicula ADD CONSTRAINT FK_Pelicula_IdEstudio 
-FOREIGN KEY(IdEstudio) REFERENCES Estudio(IdEstudio)
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ ALTER TABLE Pelicula ADD CONSTRAINT FK_Pelicula_IdEstudio 
+ FOREIGN KEY(IdEstudio) REFERENCES Estudio(IdEstudio)
+ ON DELETE NO ACTION ON UPDATE CASCADE;
 
-ALTER TABLE Pelicula ADD CONSTRAINT CK_Peliculas_ValidaFechas 
-CHECK (FechaDesincorporacion>FechaInclusion);
+ ALTER TABLE Pelicula ADD CONSTRAINT CK_Peliculas_ValidaFechas 
+ CHECK (FechaDesincorporacion>FechaInclusion);
 
-CREATE INDEX IndexTitulo_IDEstudios ON Pelicula(Titulo,IdEstudio);
+ CREATE INDEX IndexTitulo_IDEstudios ON Pelicula(Titulo,IdEstudio);
 ------------------------------------------------------------------
  CREATE TABLE Prestamo(
     NumCliente int, 
@@ -95,19 +95,19 @@ CREATE INDEX IndexTitulo_IDEstudios ON Pelicula(Titulo,IdEstudio);
     EstatusP dom_statusP
 );
 
-ALTER TABLE Prestamo ADD CONSTRAINT PK_NumCliente_IdPelicula_FechaPrestamo
-PRIMARY KEY(NumCliente,IdPelicula,FechaPrestamo);
+ ALTER TABLE Prestamo ADD CONSTRAINT PK_NumCliente_IdPelicula_FechaPrestamo
+ PRIMARY KEY(NumCliente,IdPelicula,FechaPrestamo);
 
-ALTER TABLE Prestamo ADD CONSTRAINT FK_Prestamo_NumCliente 
-FOREIGN KEY(NumCliente) REFERENCES Cliente(NumCliente)
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ ALTER TABLE Prestamo ADD CONSTRAINT FK_Prestamo_NumCliente 
+ FOREIGN KEY(NumCliente) REFERENCES Cliente(NumCliente)
+ ON DELETE NO ACTION ON UPDATE CASCADE;
 
-ALTER TABLE Prestamo ADD CONSTRAINT FK_Prestamo_IdPelicula
-FOREIGN KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ ALTER TABLE Prestamo ADD CONSTRAINT FK_Prestamo_IdPelicula
+ FOREIGN KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
+ ON DELETE NO ACTION ON UPDATE CASCADE;
 
-ALTER TABLE Prestamo ADD CONSTRAINT CK_Prestamo_ValidaFechas 
-CHECK (FechaDevolucion>=FechaPrestamo);
+ ALTER TABLE Prestamo ADD CONSTRAINT CK_Prestamo_ValidaFechas 
+ CHECK (FechaDevolucion>=FechaPrestamo);
 
 ------------------------------------------------------------------------
  CREATE TABLE PeliculasActores(
@@ -116,32 +116,34 @@ CHECK (FechaDevolucion>=FechaPrestamo);
     Personaje dom_nombre
 );
 
-ALTER TABLE PeliculasActores ADD CONSTRAINT PK_IdPelicula_IdActor_Personaje PRIMARY KEY(IdPelicula,IdActor,Personaje);
+ ALTER TABLE PeliculasActores ADD CONSTRAINT PK_IdPelicula_IdActor_Personaje PRIMARY KEY(IdPelicula,IdActor,Personaje);
 
-ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdPelicula 
-FOREIGN KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdPelicula 
+ FOREIGN KEY(IdPelicula) REFERENCES Pelicula(IdPelicula)
+ ON DELETE NO ACTION ON UPDATE CASCADE;
 
-ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdActor 
-FOREIGN KEY(IdActor) REFERENCES Actor(IdActor)
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ ALTER TABLE PeliculasActores ADD CONSTRAINT FK_PeliculasActores_IdActor 
+ FOREIGN KEY(IdActor) REFERENCES Actor(IdActor)
+ ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ----------------------------------------------
 
-DROP DOMAIN dom_statusCli;
+----COMANDOS DE MODIFICACION----
 
-ALTER TABLE Pelicula DROP COLUMN FechaDesincorporacion;
+ DROP DOMAIN dom_statusCli CASCADE; ----NO PERMITE RESTRICT, USAMOS CASCADE Y ELIMINARA LA COLUMNA EstatusC EN LA TABLA CLIENTE
 
-ALTER TABLE Prestamo ADD CONSTRAINT CK_DiasPrestamos
-CHECK (DiasPrestamos>=1 AND DiasPrestamos<=7);
+ ALTER TABLE Pelicula DROP COLUMN FechaDesincorporacion;
 
-CREATE DOMAIN dom_statusCli AS TEXT
+ ALTER TABLE Prestamo ADD CONSTRAINT CK_DiasPrestamos
+ CHECK (DiasPrestamos>=1 AND DiasPrestamos<=7);
+
+ CREATE DOMAIN dom_statusCli AS TEXT
     CHECK(
         VALUE = 'Activo' OR
         VALUE = 'Suspendido' OR
         VALUE = 'Retirado'
     ) NOT NULL;
 
-ALTER TABLE Cliente ADD COLUMN EstatusC dom_statusCli;
+ ALTER TABLE Cliente ADD COLUMN EstatusC dom_statusCli; ----RESTAURAMOS LA COLUMNA ELIMINADA EN EL PRIMER COMANDO
 
-ALTER TABLE Pelicula ADD COLUMN FechaDesincorporacion dom_fecha;
+ ALTER TABLE Pelicula ADD COLUMN FechaDesincorporacion dom_fecha;
